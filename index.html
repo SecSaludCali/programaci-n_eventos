@@ -43,10 +43,22 @@
         }
 
         .fc .fc-toolbar-title {
-            font-size: 1.5rem !important;
+            font-size: 1.25rem !important; /* Ligeramente más pequeño para móviles */
             font-weight: 800;
             color: #1e293b;
             text-transform: capitalize;
+        }
+        
+        @media (min-width: 1024px) {
+            .fc .fc-toolbar-title { font-size: 1.5rem !important; }
+        }
+
+        /* Responsive toolbar for fullcalendar on small screens */
+        @media (max-width: 640px) {
+            .fc-toolbar.fc-header-toolbar {
+                flex-direction: column;
+                gap: 0.75rem;
+            }
         }
 
         /* Eliminar bordes por defecto de FullCalendar para usar los de Tailwind */
@@ -95,6 +107,8 @@
         /* SweetAlert Custom UI */
         .swal2-popup {
             border-radius: 1.25rem !important;
+            width: 95% !important;
+            max-width: 36rem !important;
         }
 
         .swal2-html-container {
@@ -110,47 +124,48 @@
 </head>
 
 <body
-    class="bg-slate-50 h-screen overflow-hidden text-slate-800 font-sans selection:bg-indigo-100 selection:text-indigo-900">
+    class="bg-slate-50 text-slate-800 font-sans selection:bg-indigo-100 selection:text-indigo-900 flex flex-col min-h-screen lg:h-screen lg:overflow-hidden">
 
     <!-- Navbar superior -->
     <header
-        class="bg-gradient-to-r from-indigo-700 to-indigo-600 text-white shadow-lg py-3 px-6 flex justify-between items-center z-20 relative">
-        <div class="flex items-center gap-3">
-            <div class="bg-white/20 p-2 rounded-lg backdrop-blur-sm">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        class="bg-gradient-to-r from-indigo-700 to-indigo-600 text-white shadow-lg py-3 px-4 sm:px-6 flex justify-between items-center z-20 shrink-0">
+        <div class="flex items-center gap-2 sm:gap-3">
+            <div class="bg-white/20 p-1.5 sm:p-2 rounded-lg backdrop-blur-sm hidden sm:block">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
                     </path>
                 </svg>
             </div>
             <div>
-                <h1 class="text-xl font-bold tracking-tight">Subsecretaría de Promoción, Prevención y Producción Social
+                <h1 class="text-sm sm:text-xl font-bold tracking-tight leading-tight">Subsecretaría de Promoción, Prevención y Producción Social
                     de la Salud</h1>
-                <p class="text-xs text-indigo-100 font-medium opacity-80">Formulario de Programación</p>
+                <p class="text-[10px] sm:text-xs text-indigo-100 font-medium opacity-80 mt-0.5">Formulario de Programación</p>
             </div>
         </div>
         <div
-            class="flex items-center gap-2 text-sm bg-white/10 border border-white/20 py-1.5 px-4 rounded-full font-medium shadow-inner backdrop-blur-sm">
-            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
-            En línea
+            class="flex items-center gap-1.5 text-xs sm:text-sm bg-white/10 border border-white/20 py-1 px-3 sm:py-1.5 sm:px-4 rounded-full font-medium shadow-inner backdrop-blur-sm shrink-0">
+            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-green-400 animate-pulse"></span>
+            <span class="hidden sm:inline">En línea</span>
         </div>
     </header>
 
-    <div class="flex flex-col lg:flex-row h-[calc(100vh-4rem)] w-full">
+    <!-- Contenedor Principal (Flexible para móvil, Grid/Flex estático para PC) -->
+    <div class="flex flex-col lg:flex-row flex-1 overflow-hidden h-full">
 
         <!-- PANEL IZQUIERDO: FORMULARIO -->
         <div
-            class="w-full lg:w-1/3 lg:max-w-md bg-white border-r border-slate-200 shadow-[4px_0_24px_rgba(0,0,0,0.02)] overflow-y-auto z-10">
-            <div class="p-6">
+            class="w-full lg:w-1/3 lg:max-w-md bg-white border-b lg:border-b-0 lg:border-r border-slate-200 shadow-[4px_0_24px_rgba(0,0,0,0.02)] lg:overflow-y-auto z-10 shrink-0">
+            <div class="p-4 sm:p-6">
 
-                <div class="mb-6 pb-4 border-b border-slate-100 flex justify-between items-start">
+                <div class="mb-5 pb-4 border-b border-slate-100 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-3">
                     <div>
-                        <h2 id="form-title" class="text-2xl font-extrabold text-slate-800 tracking-tight">Nueva
+                        <h2 id="form-title" class="text-xl sm:text-2xl font-extrabold text-slate-800 tracking-tight">Nueva
                             Actividad</h2>
-                        <p id="form-subtitle" class="text-sm text-slate-500 mt-1">Programa los detalles del evento.</p>
+                        <p id="form-subtitle" class="text-xs sm:text-sm text-slate-500 mt-1">Programa los detalles del evento.</p>
                     </div>
                     <button id="btn-cancelar" type="button"
-                        class="hidden flex items-center gap-1 text-xs text-red-600 hover:text-red-800 font-bold bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors"
+                        class="hidden flex items-center justify-center gap-1 text-xs text-red-600 hover:text-red-800 font-bold bg-red-50 hover:bg-red-100 px-3 py-1.5 rounded-md transition-colors w-full sm:w-auto"
                         onclick="resetForm()">
                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -160,7 +175,7 @@
                     </button>
                 </div>
 
-                <form id="eventoForm" class="space-y-5">
+                <form id="eventoForm" class="space-y-4 sm:space-y-5">
 
                     <!-- CAMPOS OCULTOS PARA EDICIÓN -->
                     <input type="hidden" id="action" name="action" value="create">
@@ -168,12 +183,12 @@
                     <input type="hidden" id="id" name="id" value="">
 
                     <!-- GRUPO Y SUBGRUPO (Movidos al principio) -->
-                    <div class="bg-indigo-50/50 p-4 rounded-xl border border-indigo-100/50 space-y-4">
+                    <div class="bg-indigo-50/50 p-3 sm:p-4 rounded-xl border border-indigo-100/50 space-y-3 sm:space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-indigo-900 uppercase tracking-wider mb-1">Grupo
                                 Estratégico</label>
                             <select id="grupo" name="grupo" required onchange="evaluarGrupo()"
-                                class="block w-full rounded-lg border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-medium text-indigo-900 transition-colors">
+                                class="block w-full rounded-lg border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm font-medium text-indigo-900 transition-colors">
                                 <option value="">-- Seleccione --</option>
                                 <option value="Salud Pública">Salud Pública</option>
                                 <option value="Ambiente y Salud">Ambiente y Salud</option>
@@ -186,25 +201,25 @@
                             <label class="block text-xs font-bold text-indigo-900 uppercase tracking-wider mb-1">Línea
                                 de Acción</label>
                             <select id="subgrupo" name="subgrupo"
-                                class="block w-full rounded-lg border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-indigo-800 transition-colors">
+                                class="block w-full rounded-lg border-indigo-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm text-indigo-800 transition-colors">
                                 <!-- Opciones dinámicas -->
                             </select>
                         </div>
                     </div>
 
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="col-span-2">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="col-span-1 sm:col-span-2">
                             <label
                                 class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Dirección</label>
                             <input type="text" id="direccion" name="direccion" required
-                                class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm bg-slate-50 transition-colors"
+                                class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm bg-slate-50 transition-colors"
                                 placeholder="Ej: Carrera 15 # 10-20">
                         </div>
-                        <div class="col-span-2">
+                        <div class="col-span-1 sm:col-span-2">
                             <label
                                 class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Barrio</label>
                             <input type="text" id="barrio" name="barrio" required
-                                class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
+                                class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
                                 placeholder="Ej: San Antonio">
                         </div>
                     </div>
@@ -213,7 +228,7 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Comuna o
                             Corregimiento</label>
                         <select id="comuna" name="comuna" required
-                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm font-medium text-slate-700 transition-colors">
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm font-medium text-slate-700 transition-colors">
                             <option value="">-- Seleccione --</option>
                             <optgroup label="Comunas Urbanas" id="optgroup-comunas"></optgroup>
                             <optgroup label="Corregimientos Rurales">
@@ -239,7 +254,7 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Población
                             Objeto</label>
                         <input type="text" id="poblacion" name="poblacion" required
-                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
                             placeholder="Ej: Adultos mayores, Niños...">
                     </div>
 
@@ -247,7 +262,7 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Servicios
                             Ofertados</label>
                         <textarea id="servicios" name="servicios" rows="2" required
-                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
                             placeholder="Describa los servicios a prestar..."></textarea>
                     </div>
 
@@ -255,28 +270,28 @@
                         <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Articulación
                             requerida</label>
                         <input type="text" id="articulacion" name="articulacion"
-                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors"
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
                             placeholder="¿Con qué organismos? (Opcional)">
                     </div>
 
-                    <div class="grid grid-cols-1 gap-4">
+                    <div class="grid grid-cols-1 gap-3 sm:gap-4">
                         <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
                             <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Fecha y
                                 Hora</label>
                             <input type="datetime-local" id="horario" name="horario" required
-                                class="block w-full border-none shadow-inner rounded-md focus:ring-indigo-500 sm:text-sm font-bold text-indigo-700 bg-white">
+                                class="block w-full border-none shadow-inner rounded-md focus:ring-indigo-500 text-sm font-bold text-indigo-700 bg-white">
                         </div>
                         <div>
                             <label
                                 class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Responsable</label>
                             <input type="text" id="responsable" name="responsable" required
-                                class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm transition-colors">
+                                class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors">
                         </div>
                     </div>
 
-                    <div class="pt-4 pb-8 flex flex-col gap-2">
+                    <div class="pt-3 pb-6 flex flex-col gap-2">
                         <button type="submit" id="btn-submit"
-                            class="w-full flex justify-center items-center gap-2 py-3.5 px-4 border border-transparent rounded-xl shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-[0_6px_20px_rgba(79,70,229,0.23)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
+                            class="w-full flex justify-center items-center gap-2 py-3 px-4 border border-transparent rounded-xl shadow-[0_4px_14px_0_rgba(79,70,229,0.39)] text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-700 hover:shadow-[0_6px_20px_rgba(79,70,229,0.23)] hover:-translate-y-0.5 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-200">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4">
@@ -286,7 +301,7 @@
                         </button>
                         
                         <!-- BOTÓN ELIMINAR (Solo visible en modo edición) -->
-                        <button type="button" id="btn-delete" class="hidden w-full flex justify-center items-center gap-2 py-2 px-4 rounded-xl text-sm font-bold text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-700 transition-colors border border-red-100" onclick="confirmarEliminar()">
+                        <button type="button" id="btn-delete" class="hidden w-full flex justify-center items-center gap-2 py-2.5 px-4 rounded-xl text-sm font-bold text-red-600 bg-red-50 hover:bg-red-100 hover:text-red-700 transition-colors border border-red-100" onclick="confirmarEliminar()">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                             Eliminar Evento
                         </button>
@@ -296,12 +311,12 @@
         </div>
 
         <!-- PANEL DERECHO: CALENDARIO -->
-        <div class="w-full lg:w-2/3 bg-slate-100/50 p-4 lg:p-6 overflow-y-auto flex flex-col">
+        <div class="w-full lg:w-2/3 lg:flex-1 bg-slate-100/50 p-3 sm:p-4 lg:p-6 lg:overflow-y-auto flex flex-col min-h-[600px] lg:min-h-0">
 
             <!-- CONTROLES SUPERIORES DEL CALENDARIO (Buscador de mes) -->
-            <div class="flex justify-end items-center mb-3">
+            <div class="flex justify-between sm:justify-end items-center mb-3">
                 <div
-                    class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md">
+                    class="flex items-center gap-2 bg-white px-3 py-1.5 rounded-xl border border-slate-200 shadow-sm transition-all hover:shadow-md w-full sm:w-auto justify-between sm:justify-start">
                     <label for="mesNavegador"
                         class="text-[10px] font-extrabold text-slate-500 uppercase tracking-widest">Saltar a
                         mes:</label>
@@ -310,8 +325,11 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 flex-grow relative min-h-[500px]">
-                <div id='calendar' class="h-full"></div>
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-3 sm:p-4 flex-grow relative flex flex-col h-full">
+                <!-- Wrapper extra para que FC respete alturas en pantallas móviles -->
+                <div class="flex-grow w-full relative">
+                    <div id='calendar' class="absolute inset-0 h-full w-full"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -419,6 +437,9 @@
 
             document.getElementById('btn-cancelar').classList.remove('hidden');
             document.getElementById('btn-delete').classList.remove('hidden'); // Mostrar botón eliminar
+            
+            // Auto scroll hacia el formulario (muy útil en móviles)
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             document.querySelector('.w-full.lg\\:w-1\\/3').scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -433,7 +454,7 @@
                 cancelButtonColor: '#94a3b8',
                 confirmButtonText: 'Sí, eliminar',
                 cancelButtonText: 'Cancelar',
-                customClass: { popup: 'rounded-2xl' }
+                customClass: { popup: 'rounded-2xl w-[95%] max-w-sm' }
             }).then((result) => {
                 if (result.isConfirmed) {
                     
@@ -452,7 +473,7 @@
                                 text: 'El evento ha sido borrado correctamente.',
                                 timer: 2000,
                                 showConfirmButton: false,
-                                customClass: { popup: 'rounded-2xl' }
+                                customClass: { popup: 'rounded-2xl w-[95%] max-w-sm' }
                             });
                             eventosCacheados = null; // Borrar caché para recargar
                             resetForm();
@@ -482,8 +503,19 @@
                 initialView: 'dayGridMonth',
                 locale: 'es',
                 height: '100%',
-                headerToolbar: { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,listWeek' },
+                headerToolbar: { 
+                    left: 'prev,next today', 
+                    center: 'title', 
+                    right: window.innerWidth < 640 ? 'dayGridMonth,listWeek' : 'dayGridMonth,timeGridWeek,listWeek' 
+                },
                 buttonText: { today: 'Hoy', month: 'Mes', week: 'Semana', list: 'Agenda' },
+                windowResize: function(arg) {
+                    if (window.innerWidth < 640) {
+                        calendar.setOption('headerToolbar', { left: 'prev,next today', center: 'title', right: 'dayGridMonth,listWeek' });
+                    } else {
+                        calendar.setOption('headerToolbar', { left: 'prev,next today', center: 'title', right: 'dayGridMonth,timeGridWeek,listWeek' });
+                    }
+                },
 
                 // Actualizar el "Navegador de Meses" cuando cambiamos la vista del calendario
                 datesSet: function (info) {
@@ -496,22 +528,48 @@
                 eventSources: [
                     {
                         events: function (fetchInfo, successCallback, failureCallback) {
-                            // Si ya tenemos los datos descargados, los mostramos instantáneamente
                             if (eventosCacheados) {
                                 successCallback(eventosCacheados);
                                 return;
                             }
 
-                            // Si no, los vamos a buscar a Google Sheets
-                            Swal.fire({ title: 'Sincronizando...', text: 'Obteniendo datos de Google Sheets', allowOutsideClick: false, showConfirmButton: false, didOpen: () => { Swal.showLoading() } });
+                            Swal.fire({ title: 'Sincronizando...', text: 'Obteniendo datos', allowOutsideClick: false, showConfirmButton: false, didOpen: () => { Swal.showLoading() }, customClass: { popup: 'rounded-2xl w-[90%] max-w-sm' } });
+                            
+                            // Usar fetch para manejar posibles redirecciones de Google
                             fetch(APPS_SCRIPT_URL)
-                                .then(response => response.json())
+                                .then(response => {
+                                    if (!response.ok) {
+                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                    }
+                                    return response.json();
+                                })
                                 .then(data => {
                                     eventosCacheados = data; // Guardar en caché
                                     Swal.close();
                                     successCallback(data);
                                 })
-                                .catch(error => { Swal.fire('Error', 'No se pudieron cargar los eventos', 'error'); failureCallback(error); });
+                                .catch(error => { 
+                                    console.error('Fetch error:', error);
+                                    
+                                    // Fallback: Intento mediante script tag (JSONP) si fetch directo falla por CORS
+                                    let script = document.createElement('script');
+                                    let callbackName = 'jsonpCallback_' + Math.round(100000 * Math.random());
+                                    
+                                    window[callbackName] = function(data) {
+                                        delete window[callbackName];
+                                        document.body.removeChild(script);
+                                        eventosCacheados = data;
+                                        Swal.close();
+                                        successCallback(data);
+                                    };
+                                    
+                                    script.src = APPS_SCRIPT_URL + "?callback=" + callbackName;
+                                    script.onerror = function() {
+                                       Swal.fire({icon: 'error', title: 'Error', text: 'Conexión a Google Sheets bloqueada. Asegúrate de implementar como "Cualquier persona".', customClass: { popup: 'rounded-2xl w-[95%] max-w-sm' }});
+                                       failureCallback(error);
+                                    };
+                                    document.body.appendChild(script);
+                                });
                         }
                     },
                     {
@@ -570,13 +628,13 @@
                     }
 
                     let divEl = document.createElement('div');
-                    divEl.className = `evento-personalizado w-full p-1.5 border rounded-lg overflow-hidden flex flex-col justify-start ${bgClass}`;
+                    divEl.className = `evento-personalizado w-full p-1 sm:p-1.5 border rounded-lg overflow-hidden flex flex-col justify-start ${bgClass}`;
                     divEl.innerHTML = `
                         <div class="flex items-center gap-1.5 mb-0.5">
-                            <span class="w-2 h-2 rounded-full shadow-sm ${dotClass}"></span>
-                            <span class="text-[10px] font-bold tracking-wide opacity-90">${arg.timeText}</span>
+                            <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full shadow-sm ${dotClass} shrink-0"></span>
+                            <span class="text-[9px] sm:text-[10px] font-bold tracking-wide opacity-90 truncate">${arg.timeText}</span>
                         </div>
-                        <div class="text-xs font-semibold leading-tight truncate px-0.5">${arg.event.title}</div>
+                        <div class="text-[10px] sm:text-xs font-semibold leading-tight truncate px-0.5">${arg.event.title}</div>
                     `;
                     return { domNodes: [divEl] };
                 },
@@ -599,29 +657,29 @@
                     else if (props.grupo === 'Regulación Sanitaria' || props.grupo === 'Regulación y Control') { colorGrupoClass = 'bg-orange-50/80 text-orange-800 border-orange-100'; textGrupoClass = 'text-orange-600'; }
 
                     const htmlModal = `
-                        <div class="text-left mt-2 space-y-4">
+                        <div class="text-left mt-2 space-y-3 sm:space-y-4">
                             <!-- Banner de Fecha Dinámico -->
-                            <div class="${colorGrupoClass} p-3.5 rounded-xl border flex items-center gap-3">
-                                <div class="bg-white p-1.5 rounded-lg shadow-sm ${textGrupoClass}"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
-                                <span class="font-bold text-sm capitalize">${fechaFomateada}</span>
+                            <div class="${colorGrupoClass} p-3 sm:p-3.5 rounded-xl border flex items-center gap-3">
+                                <div class="bg-white p-1.5 rounded-lg shadow-sm shrink-0 ${textGrupoClass}"><svg class="w-5 h-5 sm:w-6 sm:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg></div>
+                                <span class="font-bold text-xs sm:text-sm capitalize leading-tight">${fechaFomateada}</span>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
                                     <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Estrategia</span>
-                                    <span class="font-bold text-slate-800">${props.grupo === 'Regulación y Control' ? 'Regulación Sanitaria' : props.grupo}</span>
+                                    <span class="font-bold text-slate-800 block">${props.grupo === 'Regulación y Control' ? 'Regulación Sanitaria' : props.grupo}</span>
                                     ${props.subgrupo && props.subgrupo !== 'N/A' ? `<span class="block text-xs font-medium text-slate-500 mt-0.5 leading-tight">${props.subgrupo}</span>` : ''}
                                 </div>
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
                                     <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Ubicación</span>
-                                    <span class="font-bold text-slate-800 line-clamp-1" title="${props.barrio}">${props.barrio}</span>
+                                    <span class="font-bold text-slate-800 line-clamp-1 block" title="${props.barrio}">${props.barrio}</span>
                                     <span class="block text-xs font-medium text-slate-500 mt-0.5 leading-tight line-clamp-1">${props.direccion} (${props.comuna})</span>
                                 </div>
                             </div>
 
                             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
                                 <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Población Objeto</span>
-                                <span class="text-sm font-bold text-slate-700">${props.poblacion}</span>
+                                <span class="text-sm font-bold text-slate-700 block">${props.poblacion}</span>
                             </div>
 
                             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
@@ -629,21 +687,21 @@
                                 <p class="text-sm text-slate-700 font-medium whitespace-pre-wrap leading-relaxed">${props.servicios}</p>
                             </div>
 
-                            <div class="grid grid-cols-2 gap-3 text-sm">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
                                     <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Responsable</span>
-                                    <span class="font-bold text-slate-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-400" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> ${props.responsable}</span>
+                                    <span class="font-bold text-slate-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> <span class="truncate">${props.responsable}</span></span>
                                 </div>
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
                                     <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Articulación</span>
-                                    <span class="font-bold text-slate-800">${props.articulacion || '<span class="text-slate-400 italic font-normal">Ninguna</span>'}</span>
+                                    <span class="font-bold text-slate-800 block">${props.articulacion || '<span class="text-slate-400 italic font-normal">Ninguna</span>'}</span>
                                 </div>
                             </div>
                         </div>
                     `;
 
                     Swal.fire({
-                        title: `<div class="text-2xl font-extrabold text-slate-800 text-left tracking-tight border-b border-slate-100 pb-3">${info.event.title}</div>`,
+                        title: `<div class="text-lg sm:text-2xl font-extrabold text-slate-800 text-left tracking-tight border-b border-slate-100 pb-2 sm:pb-3 leading-tight">${info.event.title}</div>`,
                         html: htmlModal,
                         showCloseButton: true,
                         showCancelButton: true,
@@ -654,13 +712,11 @@
                         `,
                         cancelButtonText: 'Cerrar',
                         customClass: {
-                            popup: 'p-4',
                             title: 'mb-0',
                             confirmButton: 'w-full sm:w-auto bg-amber-500 hover:bg-amber-600 focus:ring-4 focus:ring-amber-200 text-white font-bold rounded-xl text-sm px-5 py-3 transition-all order-2 sm:order-1',
-                            cancelButton: 'w-full sm:w-auto bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 font-bold rounded-xl text-sm px-5 py-2.5 transition-all order-1 sm:order-2 mb-3 sm:mb-0',
-                            actions: 'flex flex-col sm:flex-row gap-3 w-full justify-end mt-6 border-t border-slate-100 pt-4'
-                        },
-                        width: '36rem'
+                            cancelButton: 'w-full sm:w-auto bg-white border-2 border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-800 font-bold rounded-xl text-sm px-5 py-2.5 transition-all order-1 sm:order-2 mb-2 sm:mb-0',
+                            actions: 'flex flex-col sm:flex-row gap-2 sm:gap-3 w-full justify-end mt-4 sm:mt-6 border-t border-slate-100 pt-4'
+                        }
                     }).then((result) => {
                         if (result.isConfirmed) { cargarEventoEnFormulario(info.event); }
                     });
@@ -680,7 +736,7 @@
             form.addEventListener('submit', function (e) {
                 e.preventDefault();
 
-                Swal.fire({ title: 'Guardando...', text: 'Sincronizando con la base de datos', allowOutsideClick: false, didOpen: () => { Swal.showLoading() } });
+                Swal.fire({ title: 'Guardando...', text: 'Sincronizando con la base de datos', allowOutsideClick: false, didOpen: () => { Swal.showLoading() }, customClass: { popup: 'rounded-2xl w-[95%] max-w-sm' } });
 
                 const data = new URLSearchParams(new FormData(form));
 
@@ -691,18 +747,23 @@
                         Swal.fire({
                             icon: 'success',
                             title: isUpdate ? '¡Actualizado!' : '¡Registrado!',
-                            text: isUpdate ? 'El evento ha sido modificado con éxito.' : 'El evento ha sido guardado.',
+                            text: isUpdate ? 'El evento ha sido modificado.' : 'El evento ha sido guardado.',
                             timer: 2000,
                             showConfirmButton: false,
-                            customClass: { popup: 'rounded-2xl' }
+                            customClass: { popup: 'rounded-2xl w-[95%] max-w-sm' }
                         });
 
                         eventosCacheados = null; // BORRAR CACHÉ para forzar descarga nueva
                         resetForm();
                         calendar.refetchEvents(); // Recargar el calendario con los datos frescos
+                        
+                        // Si estábamos en móvil y editando, volvemos a bajar al calendario suavemente tras guardar
+                        if(window.innerWidth < 1024) {
+                            setTimeout(() => { document.getElementById('calendar').scrollIntoView({ behavior: 'smooth' }); }, 1500);
+                        }
                     })
                     .catch(err => {
-                        Swal.fire('Error', 'Hubo un problema de conexión.', 'error');
+                        Swal.fire({icon: 'error', title: 'Error', text: 'Hubo un problema de conexión al guardar.', customClass: { popup: 'rounded-2xl w-[95%] max-w-sm' }});
                     });
             });
         });
