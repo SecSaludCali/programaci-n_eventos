@@ -182,7 +182,29 @@
                     <input type="hidden" id="row" name="row" value="">
                     <input type="hidden" id="id" name="id" value="">
 
-                    <!-- GRUPO Y SUBGRUPO (Movidos al principio) -->
+                    <!-- NUEVAS PREGUNTAS (Nombre, Objetivo, Entidad) -->
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Nombre de la Actividad</label>
+                        <input type="text" id="nombreActividad" name="nombreActividad" required
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
+                            placeholder="Ej: Jornada de vacunación">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Objetivo de la Actividad</label>
+                        <textarea id="objetivoActividad" name="objetivoActividad" rows="2" required
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
+                            placeholder="Describa el objetivo principal..."></textarea>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold text-slate-500 uppercase tracking-wider mb-1">Entidad que la requiere</label>
+                        <input type="text" id="entidadRequiere" name="entidadRequiere" required
+                            class="block w-full rounded-lg border-slate-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm transition-colors"
+                            placeholder="Ej: Secretaría de Educación, Junta Comunal...">
+                    </div>
+
+                    <!-- GRUPO Y SUBGRUPO -->
                     <div class="bg-indigo-50/50 p-3 sm:p-4 rounded-xl border border-indigo-100/50 space-y-3 sm:space-y-4">
                         <div>
                             <label class="block text-xs font-bold text-indigo-900 uppercase tracking-wider mb-1">Grupo
@@ -274,7 +296,7 @@
                             placeholder="¿Con qué organismos? (Opcional)">
                     </div>
 
-                    <div class="grid grid-cols-1 gap-3 sm:gap-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                         <div class="bg-slate-50 p-3 rounded-lg border border-slate-200">
                             <label class="block text-xs font-bold text-slate-600 uppercase tracking-wider mb-1">Fecha y
                                 Hora</label>
@@ -336,7 +358,7 @@
 
     <script>
         // URL DE TU SCRIPT DE GOOGLE SHEETS
-        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwGU6MbzB9kgd1RbAWs3L4p1qyT70uIbrT_uejylOQC-znJggMn_--ooVzx_JdNgxfC/exec';
+        const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxwgR9HqTOYQrQDJqgdsu_00uhuUkszknT9qczFsfJ9PbYXtY6gzhFFykp_HxJxSMdk/exec';
 
         let calendar;
 
@@ -402,6 +424,11 @@
             document.getElementById('action').value = 'update';
             document.getElementById('id').value = event.id;
             document.getElementById('row').value = props.row;
+
+            // CARGAR LAS NUEVAS PREGUNTAS
+            document.getElementById('nombreActividad').value = props.nombreActividad || '';
+            document.getElementById('objetivoActividad').value = props.objetivoActividad || '';
+            document.getElementById('entidadRequiere').value = props.entidadRequiere || '';
 
             // Para mantener compatibilidad por si en el excel dice "Regulación y Control"
             let valorGrupo = props.grupo;
@@ -671,31 +698,41 @@
                                     ${props.subgrupo && props.subgrupo !== 'N/A' ? `<span class="block text-xs font-medium text-slate-500 mt-0.5 leading-tight">${props.subgrupo}</span>` : ''}
                                 </div>
                                 <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Ubicación</span>
-                                    <span class="font-bold text-slate-800 line-clamp-1 block" title="${props.barrio}">${props.barrio}</span>
-                                    <span class="block text-xs font-medium text-slate-500 mt-0.5 leading-tight line-clamp-1">${props.direccion} (${props.comuna})</span>
+                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Entidad que Requiere</span>
+                                    <span class="font-bold text-slate-800 block">${props.entidadRequiere || 'No especificada'}</span>
                                 </div>
+                            </div>
+                            
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                                <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Objetivo de la Actividad</span>
+                                <p class="text-sm text-slate-700 font-medium whitespace-pre-wrap leading-relaxed">${props.objetivoActividad || 'No especificado'}</p>
                             </div>
 
                             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-                                <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Población Objeto</span>
-                                <span class="text-sm font-bold text-slate-700 block">${props.poblacion}</span>
+                                <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Ubicación</span>
+                                <span class="font-bold text-slate-800 line-clamp-1 block" title="${props.barrio}">${props.barrio}</span>
+                                <span class="block text-xs font-medium text-slate-500 mt-0.5 leading-tight line-clamp-1">${props.direccion} (${props.comuna})</span>
+                            </div>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Población Objeto</span>
+                                    <span class="text-sm font-bold text-slate-700 block">${props.poblacion}</span>
+                                </div>
+                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Responsable</span>
+                                    <span class="font-bold text-slate-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> <span class="truncate">${props.responsable}</span></span>
+                                </div>
                             </div>
 
                             <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
                                 <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Servicios Ofertados</span>
                                 <p class="text-sm text-slate-700 font-medium whitespace-pre-wrap leading-relaxed">${props.servicios}</p>
                             </div>
-
-                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
-                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Responsable</span>
-                                    <span class="font-bold text-slate-800 flex items-center gap-1.5"><svg class="w-4 h-4 text-slate-400 shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path></svg> <span class="truncate">${props.responsable}</span></span>
-                                </div>
-                                <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
-                                    <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Articulación</span>
-                                    <span class="font-bold text-slate-800 block">${props.articulacion || '<span class="text-slate-400 italic font-normal">Ninguna</span>'}</span>
-                                </div>
+                            
+                            <div class="bg-slate-50 p-3 rounded-xl border border-slate-200/60">
+                                <span class="block text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-1">Articulación</span>
+                                <span class="font-bold text-slate-800 block">${props.articulacion || '<span class="text-slate-400 italic font-normal">Ninguna</span>'}</span>
                             </div>
                         </div>
                     `;
